@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Quiz App</title>
+<style>
+ body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+  }
+  .quiz-container {
+    max-width: 600px;
+    width: 90%;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+  }
+  h1 {
+    margin-bottom: 20px;
+    color: #3498db;
+  }
+  .question {
+    font-size: 20px;
+    margin-bottom: 15px;
+    color: #333;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .option {
+    margin: 10px 0;
+    padding: 8px 15px;
+    width: 100%;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, border-color 0.3s;
+    
+    font-family: "Times New Roman";
+    font-size: 13px;
+  }
+  .option:hover {
+    background-color: #27e11a;
+    border-color: #000000;
+  }
+  .selected {
+    background-color: #27e11a;
+    color: #fff;
+    border-color: #27e11a;
+  }
+  #submit-btn {
+    margin: 15px auto;
+    padding: 8px 15px;
+    width: 50%;
+    background-color: #f5f5f5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #dbc220;
+   display: none;
+  }
+</style>
+</head>
+<body>
+<div class="quiz-container">
+  <h1>IT Quiz</h1>
+  <div class="question" id="question"></div>
+  <div class="options" id="options"></div>
+  <button id="submit-btn">Submit</button>
+  <p id="score"></p>
+</div>
+<script>
+  const questions = [
+    {
+      question: 'What does HTML stand for?',
+      options: ['Hyper Text Markup Language', 'Hypo Text Multi Langauage', 'Hellow Text Many Logic', 'Hyper Text Multi Logistic'],
+      correctAnswer: 'Hyper Text Markup Language'
+    },
+  
+    // Add more questions here
+  ];
+
+  let currentQuestion = 0;
+  let score = 0;
+  let selectedOption = null;
+
+  const questionElement = document.getElementById('question');
+  const optionsElement = document.getElementById('options');
+  const submitButton = document.getElementById('submit-btn');
+  const scoreElement = document.getElementById('score');
+
+  function displayQuestion() {
+    if (currentQuestion < questions.length) {
+      questionElement.textContent = questions[currentQuestion].question;
+      optionsElement.innerHTML = '';
+      questions[currentQuestion].options.forEach((option) => {
+        const button = document.createElement('button');
+        button.textContent = option;
+        button.className = 'option';
+        button.addEventListener('click', () => selectOption(button, option));
+        optionsElement.appendChild(button);
+      });
+    } else {
+      questionElement.textContent = 'Quiz Completed';
+      optionsElement.innerHTML = '';
+      scoreElement.textContent = `Your Score: ${score}/${questions.length}`;
+      submitButton.style.display = 'none';
+    }
+  }
+
+  function selectOption(button, option) {
+    selectedOption = option;
+    const optionButtons = optionsElement.querySelectorAll('.option');
+    optionButtons.forEach((btn) => {
+      btn.classList.remove('selected');
+    });
+    button.classList.add('selected');
+    submitButton.style.display = 'block';
+  }
+
+  submitButton.addEventListener('click', () => {
+    if (selectedOption !== null) {
+      if (selectedOption === questions[currentQuestion].correctAnswer) {
+        score++;
+      }
+      currentQuestion++;
+      selectedOption = null;
+      displayQuestion();
+    }
+  });
+
+  displayQuestion();
+</script>
+</body>
+</html>
